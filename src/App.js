@@ -1,23 +1,25 @@
-import logo from './logo.svg';
+import Table from './Table.js';
+import UserDetails from './UserDetails.js';
+
+import React, { useEffect, useState } from 'react'
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    fetch('https://datapeace-storage.s3-us-west-2.amazonaws.com/dummy_data/users.json').then((resp) => resp.json()).then((users) => setUsers(users))
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routes>
+        <Route exact path="/" element={<Table
+          users={users}
+        />} />
+        <Route exact path="/:user_id" element={<UserDetails users={users} />} />
+      </Routes>
+
+
     </div>
   );
 }
